@@ -1,9 +1,9 @@
 import React from 'react';
-import CounterCountainers from './components/CounterCountainers';
+import PostListContainer from './containers/PostListContainer';
 
 function App() {
   return (
-    <CounterCountainers/>
+    <PostListContainer/>
   );
 }
 

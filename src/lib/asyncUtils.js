@@ -1,25 +1,25 @@
 //리듀서 Utils라는 객체를 선언해주겠다.
 export const reducerUtils={
   //초기 상태를 간단하게 만들기 위한 Util함수
-  initial:(data=null)=>({
-    data,
+  initial:(initialData=null)=>({
     loading:false,
+    data:initialData,
     error:null
   }),
   loading:(prevState = null )=>({
-    data:prevState,
     loading:true,
+    data:prevState,
     error:null,
   }),
   success:data =>({
-    data,
     loading:false,
+    data,
     error:null
   }),
   error:error=>({
-    data:null,
     loading:false,
-    error
+    data:null,
+    error:error
   })
 };
 
@@ -47,4 +47,34 @@ const thunkCreator = param => async dispatch => {
   }
 }
 return thunkCreator;
+}
+// 리듀서에 있는 힘수들을 더욱 간다하게 만드는 util함수
+//key값은  post가 또는  posts가 될수도있고 더욱 많은 비동기 함수가 생성된다면 다른 값이 될수도있다.
+export const handleAsyncActions =(type,key)=>{
+  const [SUCCESS,ERROR]=[`${type}_SUCCESS`,`${type}_ERROR`];
+  //세가지 타입에 대한 리듀서를 만든다. 반환한다.
+  return (state,action)=>{
+    //update
+    switch(action.type){
+      case type:
+      return {
+        ...state,
+        [key]:reducerUtils.loading(),
+      }
+      case SUCCESS:
+        return {
+          ...state,
+          [key]:reducerUtils.success(action.apyload)
+        }
+       case ERROR:
+         return {
+           ...state,
+           [key]:reducerUtils.error(action.payload)
+         } 
+      default:
+        return state;
+    
+    }
+  }
+
 }

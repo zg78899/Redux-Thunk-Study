@@ -27,6 +27,8 @@ export const decreaseAsync =()=>(dispatch)=>{
 }
 
 //-----------이후에 CounterContaier에서 블어와서 dispatch을 한다.
+//thunk함수를 사용해서 액션이 dispatch되는 시점을 딜레이 시켜보았다.
+//thunk함수는 api을 요청할때 혹은 특정 프로미스를 다룰때 유용하게 사용할수있다.
 
 //초기값
 const initialState = 0;
@@ -47,5 +49,5 @@ export default function counter(state = initialState, action) {
 
 //이후의 루트 리듀서를 만들자
 
-//특정 thunk함수가 dispatch하면은 1초 후에 dispatch을 하는 (increase,decrease);
+//특정 ㅁ함수가 dispatch하면은 1초 후에 dispatch을 하는 (increase,decrease);
 //thunk함수는 나중에 countainer에서 불러와서 사용해야한다.

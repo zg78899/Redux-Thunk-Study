@@ -3,7 +3,7 @@
 const sleep =n=>new Promise(resolve=>setTimeout(resolve,n));
 //{id,title,body} 형식의 데이터를 만들어 줄것
 
-const posts=[
+ const posts=[
   {
     id:1,
     title:'redux미들웨어를 만들어 봅시다.',
@@ -18,8 +18,8 @@ const posts=[
     id:3,
     title:'개발자의 공부는 재밌다.',
     body:'조금은 재밌다. 물론 잘할 때'
-  },
-]
+  }
+];
 //비동기 함수
 //가짜 api함수
 
