@@ -1,9 +1,9 @@
 //redux-thunk로 프로미스 다루기
 //Promise을 만든다.
-const sleep =n=>new Promise(resolve=>setTimeout(resolve,n));
+const sleep =n=>new Promise(resolve => setTimeout(resolve,n));
 //{id,title,body} 형식의 데이터를 만들어 줄것
 
- const posts=[
+const posts = [
   {
     id:1,
     title:'redux미들웨어를 만들어 봅시다.',

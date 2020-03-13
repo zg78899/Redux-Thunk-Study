@@ -17,12 +17,12 @@ const GET_POST_ERROR = 'GET_POST_ERROR';
 //액션 생성함수를 만들어 준다. 드러나 굳이 만들지 않고 생략하고 thunk함수가 dispatch할때 객체를 넘기는 방식을 사용하여도 된다.
 
 //thunk생성함수
-export const getPosts = createPromiseThunk(GET_POSTS, postAPI.getPosts);
+export const getPosts = createPromiseThunk(GET_POSTS,postAPI.getPosts);
 export const getPost = createPromiseThunk(GET_POST, postAPI.getPostById);
 
 
 //기본 상태
-const initalState = {
+const initialState = {
   posts: reducerUtils.initial(),
   post: reducerUtils.initial()
 }
@@ -33,7 +33,7 @@ const initalState = {
 const getPostsReducer = handleAsyncActions(GET_POSTS, 'posts');
 const getPostReducer = handleAsyncActions(GET_POST, 'post');
 
-export default function posts(state = initalState, action) {
+export default function posts(state = initialState, action) {
   switch (action.type) {
     case GET_POSTS:
     case GET_POSTS_SUCCESS:
