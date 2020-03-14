@@ -19,20 +19,22 @@ const CLEAR_POST='CLEAR_POST';
 
 //thunk생성함수
 export const getPosts = createPromiseThunk(GET_POSTS,postAPI.getPosts);
-export const getPost = id =>async dispatch=>{
- dispatch({type:GET_POST,meta:id});
+export const getPost = id => async dispatch=> {
+
+ dispatch({type : GET_POST, meta : id });
  try{
-   const payload =await postAPI.getPostById();
+   const payload =await postAPI.getPostById(id);
    dispatch({
      type:GET_POST_SUCCESS,
      payload,
-     meta:id});
+     meta:id });
  }catch(e){
    dispatch({
      type:GET_POST_ERROR,
      payload:e,
-     error:true,
-     meta:id});
+     error: true,
+     meta: id
+    });
  }
 }
 //액션 생성 함수도 만들어 준다.이후에 리듀서도 만들어 준다.
@@ -64,7 +66,7 @@ const getPostReducer = (state,action)=>{
         ...state,
         post:{
           ...state.post,
-          post:reducerUtils.success(action.payload)
+          [id]:reducerUtils.success(action.payload)
         }
       }
      case GET_POST_ERROR:
@@ -72,7 +74,7 @@ const getPostReducer = (state,action)=>{
          ...state,
          post:{
            ...state.post,
-           post:reducerUtils.error(action.payload)
+           [id]:reducerUtils.error(action.payload)
          }
        } 
       default:
