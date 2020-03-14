@@ -13,13 +13,15 @@ const GET_POST = 'GET_POST';
 const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
 const GET_POST_ERROR = 'GET_POST_ERROR';
 
-
+//새로운 상태를 만들어 준다.PostList을 클릭한뒤 뒤로갔을때 상태를 비워줘야지 다른 list을 클릭했을때 잔상 같은 것이 남는 것을 해결해줄수있다.
 //액션 생성함수를 만들어 준다. 드러나 굳이 만들지 않고 생략하고 thunk함수가 dispatch할때 객체를 넘기는 방식을 사용하여도 된다.
+const CLEAR_POST='CLEAR_POST';
 
 //thunk생성함수
 export const getPosts = createPromiseThunk(GET_POSTS,postAPI.getPosts);
 export const getPost = createPromiseThunk(GET_POST, postAPI.getPostById);
-
+//액션 생성 함수도 만들어 준다.이후에 리듀서도 만들어 준다.
+export const clearPost=()=>({type:CLEAR_POST});
 
 //기본 상태
 const initialState = {
@@ -30,7 +32,7 @@ const initialState = {
 //해당하는 액션들을 처리해줄
 //Reducer
 
-const getPostsReducer = handleAsyncActions(GET_POSTS, 'posts');
+const getPostsReducer = handleAsyncActions(GET_POSTS, 'posts',true);
 const getPostReducer = handleAsyncActions(GET_POST, 'post');
 
 export default function posts(state = initialState, action) {
@@ -43,6 +45,11 @@ export default function posts(state = initialState, action) {
     case GET_POST_SUCCESS:
     case GET_POST_ERROR:
       return getPostReducer(state,action);
+    case CLEAR_POST:
+    return {
+      ...state,
+      post:reducerUtils.initial()
+     }
     default:
       return state;
   }

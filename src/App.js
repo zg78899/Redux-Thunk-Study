@@ -1,10 +1,14 @@
 import React from 'react';
-import PostListContainer from './containers/PostListContainer';
-
+import PostListPage from './pages/PostListPage';
+import PostPage from './pages/PostPage';
+import { Route } from 'react-router-dom';
 
 function App() {
   return (
-    <PostListContainer/>
+    <>
+      <Route path="/" component={PostListPage} exact={true} />
+      <Route path="/:id" component={PostPage} />
+    </>
   );
 }
 

@@ -52,7 +52,7 @@ export const reducerUtils = {
 
 // 리듀서에 있는 힘수들을 더욱 간다하게 만드는 util함수
 //key값은  post가 또는  posts가 될수도있고 더욱 많은 비동기 함수가 생성된다면 다른 값이 될수도있다.
-export const handleAsyncActions = (type, key) => {
+export const handleAsyncActions = (type, key, keepData) => {
   const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
   //세가지 타입에 대한 리듀서를 만든다. 반환한다.
   return (state, action) => {
@@ -61,7 +61,7 @@ export const handleAsyncActions = (type, key) => {
       case type:
         return {
           ...state,
-          [key]: reducerUtils.loading(),
+          [key]: reducerUtils.loading(keepData ? state[key].data :null),
         }
       case SUCCESS:
         return {
