@@ -5,7 +5,7 @@ import { reducerUtils, createPromiseThunk, handleAsyncActions } from '../lib/asy
 // api을 요청하는 액션들을 만들어야한다.
 //getPosts요청 하나당 3개의 액션을 가진다.
 const GET_POSTS = 'GET_POSTS';//요청을 시작하겠다.
-const GET_POSTS_SUCCESS = 'GET_POSTS_SUCESS';
+const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
 const GET_POSTS_ERROR = 'GET_POSTS_ERROR';
 
 //getPostsById 요청
