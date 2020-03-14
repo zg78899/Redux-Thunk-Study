@@ -19,21 +19,66 @@ const CLEAR_POST='CLEAR_POST';
 
 //thunk생성함수
 export const getPosts = createPromiseThunk(GET_POSTS,postAPI.getPosts);
-export const getPost = createPromiseThunk(GET_POST, postAPI.getPostById);
+export const getPost = id =>async dispatch=>{
+ dispatch({type:GET_POST,meta:id});
+ try{
+   const payload =await postAPI.getPostById();
+   dispatch({
+     type:GET_POST_SUCCESS,
+     payload,
+     meta:id});
+ }catch(e){
+   dispatch({
+     type:GET_POST_ERROR,
+     payload:e,
+     error:true,
+     meta:id});
+ }
+}
 //액션 생성 함수도 만들어 준다.이후에 리듀서도 만들어 준다.
 export const clearPost=()=>({type:CLEAR_POST});
 
 //기본 상태
 const initialState = {
   posts: reducerUtils.initial(),
-  post: reducerUtils.initial()
+  post: {}
 }
 
 //해당하는 액션들을 처리해줄
 //Reducer
 
 const getPostsReducer = handleAsyncActions(GET_POSTS, 'posts',true);
-const getPostReducer = handleAsyncActions(GET_POST, 'post');
+const getPostReducer = (state,action)=>{
+  const id = action.meta;
+  switch(action.type){
+    case GET_POST:
+      return {
+        ...state,
+        post:{
+          ...state.post,
+          [id]:reducerUtils.loading(state.post[id] && state.post[id].data)
+        }
+      }
+    case GET_POST_SUCCESS:
+      return {
+        ...state,
+        post:{
+          ...state.post,
+          post:reducerUtils.success(action.payload)
+        }
+      }
+     case GET_POST_ERROR:
+       return{
+         ...state,
+         post:{
+           ...state.post,
+           post:reducerUtils.error(action.payload)
+         }
+       } 
+      default:
+        return state;
+  } 
+}
 
 export default function posts(state = initialState, action) {
   switch (action.type) {

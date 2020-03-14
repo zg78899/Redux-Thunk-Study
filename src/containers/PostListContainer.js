@@ -15,10 +15,8 @@ function PostListContainer() {
     //data가 이지 존재한다면 아무것도 하지않겠다.
     // if(!data)return;
     dispatch(getPosts());
-  },[dispatch])
-
-  console.log(data);
-  //훅을 사용하여 duspatch을 했을때 의존성 배열에 dispatch을 넣어주는것이 lint의 속성에 맞다.
+  },[dispatch]);
+  //훅을 사용하여 dispatch을 했을때 의존성 배열에 dispatch을 넣어주는것이 lint의 속성에 맞다.
   if(loading && !data) return <div> 로딩중...</div>;
   if(error) return <div> 에러 발생!!</div>;
   if(!data) return null;
