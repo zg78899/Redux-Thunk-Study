@@ -24,6 +24,35 @@ export const createPromiseThunk = (type, promiseCreator) => {
   };
 };
 
+//파라미터 자체가 id다
+const defaultIdSelector =param =>param
+//id을 가져와서 meta에 넣어준다.
+export const createPromiseThunkById = (type,promiseCreator,idSelector=defaultIdSelector)=>{
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+  //thunk를 만들어주는 함수
+  return param => async dispatch => {
+    const id =idSelector(param);
+    //요청 시작
+    dispatch({type,meta:id});
+    try {
+      const payload = await promiseCreator(param);
+      dispatch({
+        type: SUCCESS,
+        payload,//결과값 posts또는 post
+        meta:id
+      })
+    } catch (e) {
+      dispatch({
+        type: ERROR,
+        payload: e,
+        error: true,
+        meta:id
+      });
+    }
+  };
+}
+
+
 //리듀서 Utils라는 객체를 선언해주겠다.
 export const reducerUtils = {
   //초기 상태를 간단하게 만들기 위한 Util함수
@@ -78,5 +107,42 @@ export const handleAsyncActions = (type, key, keepData) => {
 
     }
   }
+}
+export const handleAyncActionsById = (type, key, keepData) => {
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+  //세가지 타입에 대한 리듀서를 만든다. 반환한다.
+  return (state, action) => {
+    const id =action.meta;
 
+    //update
+    switch (action.type) {
+      case type:
+        return {
+          ...state,
+          [key]:{
+            ...state[key],
+            [id]:reducerUtils.loading(keepData ? (state[key][id] && state[key][id].data) :null),
+          } 
+        }
+      case SUCCESS:
+        return {
+          ...state,
+          [key]: {
+            ...state[key],
+            [id]:reducerUtils.success(action.payload)
+          }
+        }
+      case ERROR:
+        return {
+          ...state,
+          [key]: {
+            ...state[key],
+            [id]:reducerUtils.success(action.payload)
+          }
+        }
+      default:
+        return state;
+
+    }
+  }
 }
