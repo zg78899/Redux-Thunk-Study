@@ -11,9 +11,10 @@ function PostContainer({postId}) {
   const dispatch =useDispatch();
 
   useEffect(()=>{
-    
+    //만약에 기존의 데이터가 있으면 다시 api을 요청하지 않는다.
+    if(data)return;
     dispatch(getPost(postId));
-  },[postId,dispatch]);
+  },[postId,dispatch,data]);
 
   if(loading && !data) return <div> 로딩중...</div>
   if(error) return <div>에러 발생!!</div>
