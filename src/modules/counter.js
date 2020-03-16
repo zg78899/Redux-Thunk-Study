@@ -1,30 +1,59 @@
+import {delay,put,takeEvery,takeLatest} from 'redux-saga/effects';
+//delay는 특정 시간을 기다려라/put은 특정 행위를 dispatch해라 명령.
+//takeLatest
 // 액션 타입
 const INCREASE = 'INCREASE';
 const DECREASE = 'DECREASE';
 
+const INCREASE_ASYNC='INCREASE_ASYNC';
+const DECREASE_ASYNC='DECREASE_ASYNC';
 //액션 creator
 export const increase = () => ({ type: INCREASE });
 export const decrease = () => ({ type: DECREASE });
+//redux-saga
+// thunk로 처리했었던 것을 순수한 객체로 액션 생성함수를 만듬
+export const increaseAsync=()=>({type:INCREASE_ASYNC});
+export const decreaseAsync=()=>({type:DECREASE_ASYNC})
+//다음 사가를 만듬
+
+function* increaseSaga(){
+yield delay(1000);
+// increase을 호출해서 increase 액션 객체를 만들고 그 액션을 diapatch을 해라,redux-saga미들웨어에 명령을 한다.
+yield put(increase());
+}
+
+function* decreaseSaga(){
+  yield delay(1000);
+  yield put( decrease());
+}
+
+export function* counterSaga(){
+  //INCREASE_ASYNC액션이 dispatch되면 increaseSaga을 실행
+  yield takeEvery(INCREASE_ASYNC,increaseSaga);
+  //가장 마지막에 들어오는 saga함수만 실행을 한다.
+  yield takeLatest(DECREASE_ASYNC,decreaseSaga);
+}
 
 
 //thunk 함수
-export const increaseAsync =()=>(dispatch)=>{
- setTimeout(()=>{
- dispatch(increase());
- },1000)
-}
+// export const increaseAsync =()=>(dispatch)=>{
+//  setTimeout(()=>{
+//  dispatch(increase());
+//  },1000)
+// }
 
 // (dispatch)=>{
 //   setTimeout(()=>{
 //   dispatch(increase());
 //   },1000)
 //  } 
+
 //이만큼만 thunk 함수이다.나머지는 thunk함수를 만들어주는 함수
-export const decreaseAsync =()=>(dispatch)=>{
- setTimeout(()=>{
- dispatch(decrease());
- },1000)
-}
+// export const decreaseAsync =()=>(dispatch)=>{
+//  setTimeout(()=>{
+//  dispatch(decrease());
+//  },1000)
+// }
 
 //-----------이후에 CounterContaier에서 블어와서 dispatch을 한다.
 //thunk함수를 사용해서 액션이 dispatch되는 시점을 딜레이 시켜보았다.
