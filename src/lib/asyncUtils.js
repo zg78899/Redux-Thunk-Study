@@ -1,3 +1,5 @@
+import {call,put} from 'redux-saga/effects';
+
 //동일한 thunk생성 함수를 처리하는 함수
 //type은 GET_POSTS,GET_POST갑ㅌ은 문자열 타입
 //promiseCreator는 특정 파라미터를 가져와서 프로미스로 만드는 함수
@@ -146,3 +148,46 @@ export const handleAyncActionsById = (type, key, keepData) => {
     }
   }
 }
+export const createPromiseSaga =(type,promiseCreator)=>{
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+  return function* saga(action){
+    try{
+      //promiseCreator프로미스를 만들어 주는 함수
+      const result =yield call(promiseCreator,action.payload);
+      yield put({
+        type:SUCCESS,
+        payload:result
+      });
+    }catch(e){
+      yield put({
+        type:ERROR,
+        payload:e,
+        error:true
+      })
+    }
+  }
+}
+
+export const createPromiseSagaById =(type,promiseCreator)=>{
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+  return function* saga(action){
+    const id =action.meta;
+    try{
+      //promiseCreator프로미스를 만들어 주는 함수
+      const result =yield call(promiseCreator,action.payload);
+      yield put({
+        type:SUCCESS,
+        payload:result,
+        meta:id
+      });
+    }catch(e){
+      yield put({
+        type:ERROR,
+        payload:e,
+        error:true,
+        meta:id
+      })
+    }
+  }
+}
+

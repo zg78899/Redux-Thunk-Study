@@ -2,12 +2,14 @@
 import * as postAPI from '../ api/posts';
 import {
   reducerUtils,
-  createPromiseThunk,
+  // createPromiseThunk,
   handleAsyncActions,
   handleAyncActionsById,
-  createPromiseThunkById
+  // createPromiseThunkById,
+  createPromiseSagaById,
+  createPromiseSaga
 } from '../lib/asyncUtils';
-import { call, put ,takeEvery } from 'redux-saga/effects'
+import {takeEvery } from 'redux-saga/effects'
 // api을 요청하는 액션들을 만들어야한다.
 //getPosts요청 하나당 3개의 액션을 가진다.
 const GET_POSTS = 'GET_POSTS';//요청을 시작하겠다.
@@ -30,42 +32,46 @@ export const getPost = (id) => ({
   meta: id
 });
 
+//saga생성함수을 util함수로 2줄로 줄일수있다
+const getPostsSaga=createPromiseSaga(GET_POSTS,postAPI.getPosts);
+const getPostSaga =createPromiseSagaById(GET_POST,postAPI.getPostById);
+
 //saga생성함수
-function* getPostsSaga() {
-  try {
-    const posts = yield call(postAPI.getPosts);
-    yield put({
-      type: GET_POSTS_SUCCESS,
-      payload: posts
-    })
-  } catch (e) {
-    yield put({
-      type: GET_POSTS_ERROR,
-      payload: e,
-      error: true
-    })
-  }
-}
+// function* getPostsSaga() {
+//   try {
+//     const posts = yield call(postAPI.getPosts);
+//     yield put({
+//       type: GET_POSTS_SUCCESS,
+//       payload: posts
+//     })
+//   } catch (e) {
+//     yield put({
+//       type: GET_POSTS_ERROR,
+//       payload: e,
+//       error: true
+//     })
+//   }
+// }
 //saga 생성함수에서  파라미터로 값을 넣어주기위해서 dispatch된 액션 정보를 확인해야한다.그것은
 //파라미터로 action을 넣어주는것
-function* getPostSaga(action) {
-  const id = action.payload;
-  try {
-    const post = yield call(postAPI.getPostById, id);
-    yield put({
-      type: GET_POST_SUCCESS,
-      payload: post,
-      meta: id
-    })
-  } catch (e) {
-    yield put({
-      type: GET_POST_ERROR,
-      payload: e,
-      error: true,
-      meta: id
-    })
-  }
-}
+// function* getPostSaga(action) {
+//   const id = action.payload;
+//   try {
+//     const post = yield call(postAPI.getPostById, id);
+//     yield put({
+//       type: GET_POST_SUCCESS,
+//       payload: post,
+//       meta: id
+//     })
+//   } catch (e) {
+//     yield put({
+//       type: GET_POST_ERROR,
+//       payload: e,
+//       error: true,
+//       meta: id
+//     })
+//   }
+// }
 //-------------saga 생성함수를 모니터링하는 함수
 export function* postsSaga(){
 yield takeEvery(GET_POSTS,getPostsSaga);
