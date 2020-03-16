@@ -15,9 +15,16 @@ import {createBrowserHistory} from 'history';
 //redux-saga
 import createSagaMiddleware from 'redux-saga';
 
-const sagaMiddleware=createSagaMiddleware();
-//thunk에 router을 벅용하는 방법
+//thunk에 router을 적용하는 방법
 const customHistory = createBrowserHistory();
+
+//saga에서 router을 사용하기위해서 context안에 객체로 history을 불러준다.
+const sagaMiddleware=createSagaMiddleware({
+  context:{
+    history:customHistory
+  }
+});
+
 
 
 const store = createStore(
@@ -29,7 +36,7 @@ const store = createStore(
       ReduxThunk.withExtraArgument({ history: customHistory }),
       logger
       )));
-      
+
 //우리가 생성한 saga함수를 run을 호출해서 rootsaga을 파라미터로 넘겨준다.
 sagaMiddleware.run(rootSaga);
 
