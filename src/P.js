@@ -66,3 +66,26 @@ const getCommments=()=>async(dispatch,getState)=>{
 
 //다른 컴포넌트에서 
 dispatch(getComments());
+
+//redux-saga 비동기 example
+
+export const getPost=id=>({type:GET_POST,payload:id,meta:id});
+function* getPostSaga(action){
+  const id= action.payload;
+  try{
+    const post= yield call(postApi.getPostById,id);
+    yield put({
+       
+      type:GET_POST_SUCCESS,
+      payload:post,
+      meta:id
+    });
+  }catch(e){
+    yield put({
+      type:GET_POST_ERROR,
+      payload:e,
+      meta:id
+    });
+  }
+}
+dispatch(getPost(1));

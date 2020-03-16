@@ -7,7 +7,7 @@ import {
   handleAyncActionsById,
   createPromiseThunkById
 } from '../lib/asyncUtils';
-
+import { call, put ,takeEvery } from 'redux-saga/effects'
 // api을 요청하는 액션들을 만들어야한다.
 //getPosts요청 하나당 3개의 액션을 가진다.
 const GET_POSTS = 'GET_POSTS';//요청을 시작하겠다.
@@ -23,13 +23,62 @@ const GET_POST_ERROR = 'GET_POST_ERROR';
 //액션 생성함수를 만들어 준다. 드러나 굳이 만들지 않고 생략하고 thunk함수가 dispatch할때 객체를 넘기는 방식을 사용하여도 된다.
 const CLEAR_POST = 'CLEAR_POST';
 
+export const getPosts = () => ({ type: GET_POSTS });
+export const getPost = (id) => ({
+  type: GET_POST,
+  payload: id,
+  meta: id
+});
+
+//saga생성함수
+function* getPostsSaga() {
+  try {
+    const posts = yield call(postAPI.getPosts);
+    yield put({
+      type: GET_POSTS_SUCCESS,
+      payload: posts
+    })
+  } catch (e) {
+    yield put({
+      type: GET_POSTS_ERROR,
+      payload: e,
+      error: true
+    })
+  }
+}
+//saga 생성함수에서  파라미터로 값을 넣어주기위해서 dispatch된 액션 정보를 확인해야한다.그것은
+//파라미터로 action을 넣어주는것
+function* getPostSaga(action) {
+  const id = action.payload;
+  try {
+    const post = yield call(postAPI.getPostById, id);
+    yield put({
+      type: GET_POST_SUCCESS,
+      payload: post,
+      meta: id
+    })
+  } catch (e) {
+    yield put({
+      type: GET_POST_ERROR,
+      payload: e,
+      error: true,
+      meta: id
+    })
+  }
+}
+//-------------saga 생성함수를 모니터링하는 함수
+export function* postsSaga(){
+yield takeEvery(GET_POSTS,getPostsSaga);
+yield takeEvery(GET_POST,getPostSaga);
+}
+
 //thunk생성함수
-export const getPosts = createPromiseThunk(GET_POSTS, postAPI.getPosts);
-export const getPost = createPromiseThunkById(GET_POST, postAPI.getPostById);
+// export const getPosts = createPromiseThunk(GET_POSTS, postAPI.getPosts);
+// export const getPost = createPromiseThunkById(GET_POST, postAPI.getPostById);
 //액션 생성 함수도 만들어 준다.이후에 리듀서도 만들어 준다.
 export const clearPost = () => ({ type: CLEAR_POST });
 
-export const goToHome =()=> (dispatch,getState,{history})=>{
+export const goToHome = () => (dispatch, getState, { history }) => {
   history.push('/');
 }
 //기본 상태
