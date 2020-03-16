@@ -9,7 +9,7 @@ import {
   createPromiseSagaById,
   createPromiseSaga
 } from '../lib/asyncUtils';
-import {takeEvery ,getContext} from 'redux-saga/effects'
+import {takeEvery ,getContext ,select} from 'redux-saga/effects'
 // api을 요청하는 액션들을 만들어야한다.
 //getPosts요청 하나당 3개의 액션을 가진다.
 const GET_POSTS = 'GET_POSTS';//요청을 시작하겠다.
@@ -21,8 +21,9 @@ const GET_POST = 'GET_POST';
 const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
 const GET_POST_ERROR = 'GET_POST_ERROR';
 
-//
-
+//redux-saga에서 새로운 상태를 확인하기 위한
+//select
+const PRINT_STATE='PRINT_STATE';
 
 //새로운 상태를 만들어 준다.PostList을 클릭한뒤 뒤로갔을때 상태를 비워줘야지 다른 list을 클릭했을때 잔상 같은 것이 남는 것을 해결해줄수있다.
 //액션 생성함수를 만들어 준다. 드러나 굳이 만들지 않고 생략하고 thunk함수가 dispatch할때 객체를 넘기는 방식을 사용하여도 된다.
@@ -34,6 +35,12 @@ function* goToHomeSaga(){
   const history= yield getContext('history');
   history.push('/');
 }
+function* printStateSaga(){
+  const state =yield select(state=>state.posts);
+  console.log(state);
+}
+export const printState=()=>({type:PRINT_STATE});
+
 export const getPosts = () => ({ type: GET_POSTS });
 export const getPost = (id) => ({
   type: GET_POST,
@@ -86,6 +93,7 @@ export function* postsSaga(){
 yield takeEvery(GET_POSTS,getPostsSaga);
 yield takeEvery(GET_POST,getPostSaga);
 yield takeEvery(GO_TO_HOME,goToHomeSaga);
+yield takeEvery(PRINT_STATE,printStateSaga);
 }
 
 //thunk생성함수
