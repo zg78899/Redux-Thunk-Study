@@ -29,6 +29,9 @@ export const getPost = createPromiseThunkById(GET_POST, postAPI.getPostById);
 //액션 생성 함수도 만들어 준다.이후에 리듀서도 만들어 준다.
 export const clearPost = () => ({ type: CLEAR_POST });
 
+export const goToHome =()=> (dispatch,getState,{history})=>{
+  history.push('/');
+}
 //기본 상태
 const initialState = {
   posts: reducerUtils.initial(),

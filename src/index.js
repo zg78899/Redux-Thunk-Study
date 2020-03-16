@@ -10,19 +10,28 @@ import rootReducer from './modules/';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
-import {BrowserRouter} from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import {createBrowserHistory} from 'history';
+
+//thunk에 router을 벅용하는 방법
+const customHistory = createBrowserHistory();
 
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(ReduxThunk, logger)));
+  composeWithDevTools(
+    applyMiddleware(
+      //thunk 함수 안에서 router을 사용하기 위해서 thunk.withExtraArgument({객체로 history:customHistory});
+      ReduxThunk.withExtraArgument({ history: customHistory }),
+      logger
+      )));
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Router history={customHistory}>
     <Provider store={store} >
       <App />
     </Provider>
-  </BrowserRouter>
+  </Router>
   , document.getElementById('root'));
 //이제 리덕스 적용은 끝이 났다 
 //프리젠테이션 컴포넌트와 컴테이너 컴포넌트를 만들어 주면은 된다.
