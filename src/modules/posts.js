@@ -31,14 +31,8 @@ const CLEAR_POST = 'CLEAR_POST';
 //saga 액션
 const GO_TO_HOME ='GO_TO_HOME';
 //saga액션 생성함수
-function* goToHomeSaga(){
-  const history= yield getContext('history');
-  history.push('/');
-}
-function* printStateSaga(){
-  const state =yield select(state=>state.posts);
-  console.log(state);
-}
+
+export const goToHome =()=>({type:GO_TO_HOME});
 export const printState=()=>({type:PRINT_STATE});
 
 export const getPosts = () => ({ type: GET_POSTS });
@@ -47,6 +41,16 @@ export const getPost = (id) => ({
   payload: id,
   meta: id
 });
+export const clearPost = () => ({ type: CLEAR_POST });
+
+function* goToHomeSaga(){
+  const history = yield getContext('history');
+  history.push('/');
+}
+function* printStateSaga(){
+  const state =yield select(state=>state.posts);
+  console.log(state);
+}
 
 //saga생성함수을 util함수로 2줄로 줄일수있다
 const getPostsSaga=createPromiseSaga(GET_POSTS,postAPI.getPosts);
@@ -100,17 +104,13 @@ yield takeEvery(PRINT_STATE,printStateSaga);
 // export const getPosts = createPromiseThunk(GET_POSTS, postAPI.getPosts);
 // export const getPost = createPromiseThunkById(GET_POST, postAPI.getPostById);
 //액션 생성 함수도 만들어 준다.이후에 리듀서도 만들어 준다.
-export const clearPost = () => ({ type: CLEAR_POST });
 
 //thunk router
 // export const goToHome = () => (dispatch, getState, { history }) => {
 //   history.push('/');
 // }
 
-//redux-saga router
-export const goToHome =({type:GO_TO_HOME})=>{
 
-}
 //기본 상태
 const initialState = {
   posts: reducerUtils.initial(),
