@@ -75,9 +75,11 @@ const getPostSaga =createPromiseSagaById(GET_POST,postAPI.getPostById);
 //saga 생성함수에서  파라미터로 값을 넣어주기위해서 dispatch된 액션 정보를 확인해야한다.그것은
 //파라미터로 action을 넣어주는것
 // function* getPostSaga(action) {
+    const param =action.payload;
+    const id =action.meta;
 //   const id = action.payload;
 //   try {
-//     const post = yield call(postAPI.getPostById, id);
+//     const post = yield call(postAPI.getPostById, action.payload);
 //     yield put({
 //       type: GET_POST_SUCCESS,
 //       payload: post,
