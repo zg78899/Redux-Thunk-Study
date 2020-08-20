@@ -1,14 +1,17 @@
 import React,{useEffect} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
 import Post from '../components/Post';
-import { getPost, goToHome, printState } from '../modules/posts';
+import { getPost, goToHome, printState, clearPost } from '../modules/posts';
 import { reducerUtils } from '../lib/asyncUtils';
 
 function PostContainer({postId}) {
+
+  //초기의 post의 값은 undefined 이다. 그렇기 때문에 unefined일때 사용할 값을 설정해준다. 
   const {data,loading,error} =useSelector(
     state => 
     state.posts.post[postId] || reducerUtils.initial() )
-  const dispatch =useDispatch();
+  
+    const dispatch =useDispatch();
 
 
 
@@ -18,6 +21,11 @@ function PostContainer({postId}) {
     if(data)return;
     dispatch(getPost(postId));
   },[postId,dispatch,data]);
+
+  useEffect(()=>{
+    dispatch(getPost(postId));
+    
+  },[postId,dispatch])
 
   if(loading && !data) return <div> 로딩중...</div>
   if(error) return <div>에러 발생!!</div>
@@ -33,3 +41,4 @@ function PostContainer({postId}) {
 
 }
 export default PostContainer;
+
