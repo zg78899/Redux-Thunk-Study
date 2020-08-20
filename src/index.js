@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer, { rootSaga } from './modules/';
@@ -14,6 +15,9 @@ import { Router } from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 //redux-saga
 import createSagaMiddleware from 'redux-saga';
+import {BrowserRouter} from 'react-router-dom';
+
+
 
 //thunk에 router을 적용하는 방법
 const customHistory = createBrowserHistory();
@@ -24,8 +28,6 @@ const sagaMiddleware=createSagaMiddleware({
     history:customHistory
   }
 });
-
-
 
 const store = createStore(
   rootReducer,

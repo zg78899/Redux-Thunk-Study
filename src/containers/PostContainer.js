@@ -10,6 +10,9 @@ function PostContainer({postId}) {
     state.posts.post[postId] || reducerUtils.initial() )
   const dispatch =useDispatch();
 
+
+
+  
   useEffect(()=>{
     //만약에 기존의 데이터가 있으면 다시 api을 요청하지 않는다.
     if(data)return;

@@ -27,7 +27,7 @@ export const createPromiseThunk = (type, promiseCreator) => {
 };
 
 //파라미터 자체가 id다
-const defaultIdSelector =param =>param
+const defaultIdSelector =param =>param;
 //id을 가져와서 meta에 넣어준다.
 export const createPromiseThunkById = (type,promiseCreator,idSelector=defaultIdSelector)=>{
   const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];

@@ -2,6 +2,7 @@ import {delay,put,takeEvery,takeLatest,takeLeading} from 'redux-saga/effects';
 // takeLeading은 가장 처음에 들어오는 dispatch을 실행하고 다 끝난다음에 다음에서 가장 먼저들어온 dispatch을 실행한다.
 //delay는 특정 시간을 기다려라/put은 특정 행위를 dispatch해라 명령.
 //takeLatest
+
 // 액션 타입
 const INCREASE = 'INCREASE';
 const DECREASE = 'DECREASE';
